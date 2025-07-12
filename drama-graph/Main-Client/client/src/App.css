@@ -1,17 +1,15 @@
-/* App.css */
 .flow-wrapper {
   flex: 1;
   height: 100%;
   width: 100%;
-  position: relative;
 }
 
 .toolbar {
-  display: flex;
-  gap: 1rem;
   padding: 0.5rem 1rem;
   background-color: #333;
   color: white;
+  display: flex;
+  gap: 1rem;
   align-items: center;
 }
 
@@ -23,17 +21,19 @@ button {
   font-size: 1rem;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 button:hover {
   background-color: #666;
 }
 
-select, input[type="text"] {
+select {
   padding: 0.3rem;
   font-size: 1rem;
   border-radius: 4px;
   border: 1px solid #ccc;
+  margin-left: 0.5rem;
 }
 
 .react-flow__edge-text {
