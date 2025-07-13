@@ -35,7 +35,7 @@ const initialEdges = [
     source: '1',
     target: '2',
     label: 'dating',
-    style: { stroke: 'pink' },
+    style: { stroke: 'pink', strokeWidth: 2, opacity: 1 },
   },
 ];
 
@@ -57,6 +57,24 @@ function App() {
     return relationshipTypes[type] || 'gray';
   };
 
+  const highlightEdgesForNode = (nodeId) => {
+    setEdges((eds) =>
+      eds.map((edge) => {
+        const isConnected = edge.source === nodeId || edge.target === nodeId;
+        const baseColor = getEdgeColor(edge.label);
+        return {
+          ...edge,
+          style: {
+            ...edge.style,
+            stroke: baseColor,
+            strokeWidth: isConnected ? 4 : 2,
+            opacity: isConnected ? 1 : 0.3,
+          },
+        };
+      })
+    );
+  };
+
   const onConnect = useCallback(
     (params) => {
       const newEdge = {
@@ -66,6 +84,7 @@ function App() {
         style: {
           stroke: getEdgeColor(relationshipType),
           strokeWidth: 2,
+          opacity: 1,
         },
         selectable: true,
       };
@@ -169,6 +188,7 @@ function App() {
         cursor: 'pointer',
         border: '1px solid #555',
         boxShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+        position: 'relative',
       }}
     >
       {data.isEditing ? (
@@ -194,8 +214,17 @@ function App() {
       ) : (
         <span>{data.label}</span>
       )}
-      <Handle type="target" position={Position.Top} />
-      <Handle type="source" position={Position.Bottom} />
+
+      {/* 4 source + 4 target handles */}
+      <Handle type="target" position={Position.Top} id="t-top" style={{ background: '#555' }} />
+      <Handle type="target" position={Position.Right} id="t-right" style={{ background: '#555' }} />
+      <Handle type="target" position={Position.Bottom} id="t-bottom" style={{ background: '#555' }} />
+      <Handle type="target" position={Position.Left} id="t-left" style={{ background: '#555' }} />
+
+      <Handle type="source" position={Position.Top} id="s-top" style={{ background: '#999' }} />
+      <Handle type="source" position={Position.Right} id="s-right" style={{ background: '#999' }} />
+      <Handle type="source" position={Position.Bottom} id="s-bottom" style={{ background: '#999' }} />
+      <Handle type="source" position={Position.Left} id="s-left" style={{ background: '#999' }} />
     </div>
   );
 
@@ -248,6 +277,7 @@ function App() {
               setSelectedEdges([]);
             }
           }}
+          onNodeClick={(_, node) => highlightEdgesForNode(node.id)}
           nodeTypes={nodeTypes}
           fitView
         >
